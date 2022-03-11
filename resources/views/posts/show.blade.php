@@ -1,33 +1,33 @@
-@extends('layouts.layout')
+@extends('layouts.layout',  ['title' => "Пост №$post->post_id. $post->title"])
 
 @section('content')
-    @if(isset($_GET['search']))
-        @if(count($posts) > 0)
-            <h2>Результаты поиска по запросу <?=$_GET['search']?></h2>
-            <p class="lead">Всего найдено {{count($posts)}} постов</p>
-        @else
-            <h2>По запросу <?=$_GET['search']?> ничего не найдено</h2>
-            <a href="{{route('post.index')}}" class="btn btn-outline-primary">Отобразить все посты</a>
-        @endif
-    @endif
 
     <div class="row">
-        @foreach($posts as $post)
-        <div class="col-6">
+        <div class="col-12">
             <div class="card">
-                <div class="card-header"><h2>{{$post->short_title}}</h2></div>
+                <div class="card-header"><h2>{{$post->title}}</h2></div>
                 <div class="card-body">
-                    <div class="card-img" style="background-image: url({{ $post->img ?? asset('img/default.jpg') }})"></div>
+                    <div class="card-img card-img_max" style="background-image: url({{ $post->img ?? asset('img/default.jpg') }})"></div>
+                    <div class="card-descr">Описание: {{$post->descr}}</div>
                     <div class="card-author">Автор: {{$post->name}}</div>
-                    <a href="#" class="btn btn-outline-primary">Посмотреть пост</a>
+                    <div class="card-date">Пост создан: {{$post->created_at->diffForHumans()}}</div>
+                    <div class="card-btn">
+                        <a href="{{ route('post.index') }}" class="btn btn-outline-primary">На главную</a>
+                        @auth
+                            @if(Auth::user()->id == $post->author_id)
+                        <a href="{{ route('post.edit', ['post' => $post->post_id]) }}" class="btn btn-outline-success">Редактировать</a>
+                        <form action="{{route('post.destroy', ['post' => $post->post_id])}}" method="post"
+                        onsubmit="if (confirm('Точно удалить пост')) {return true} else {return false}">
+                            @csrf
+                            @method('DELETE')
+                            <input type="submit" class="btn btn-outline-danger" value="Удалить">
+                            @endif
+                        </form>
+                        @endauth
+                    </div>
                 </div>
             </div>
         </div>
-        @endforeach
     </div>
 
-    @if(!isset($_GET['search']))
-    {{ $posts->links() }}
-    @endif
-    <?=phpinfo();?>
 @endsection

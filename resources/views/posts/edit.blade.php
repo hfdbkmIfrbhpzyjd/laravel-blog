@@ -1,21 +1,14 @@
-@extends('layouts.layout')
+@extends('layouts.layout',  ['title' => "Редактировать пост №$post->post_id"])
 
 @section('content')
 
-    <form action="{{route('post.store')}}" method="post" enctype="multipart/form-data">
+    <form action="{{route('post.update', ['post' => $post->post_id])}}" method="post" enctype="multipart/form-data">
         @csrf
-        <h3>Создать пост</h3>
-        <div class="form-group">
-            <input name="title" type="text" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <textarea name="descr" rows="10" class="form-control" required></textarea>
-        </div>
-        <div class="form-group">
-            <input type="file" name="img">
-        </div>
+        @method('PATCH')
+        <h3>Редактировать пост</h3>
+        @include('posts.parts.form')
 
-        <input type="submit" value="Создать пост" class="btn btn-outline-success">
+        <input type="submit" value="Редактировать пост" class="btn btn-outline-success">
     </form>
 
 @endsection

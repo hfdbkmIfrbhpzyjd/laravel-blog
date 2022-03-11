@@ -2,7 +2,7 @@ body {
     background: #fff;
 }
 
-nav {
+nav, .form-group {
     margin-bottom: 15px;
 }
 
@@ -18,6 +18,18 @@ nav {
     background-repeat: no-repeat;
 }
 
-.card-img, .card-author {
+.card-img, .card-author, .card-date, .card-descr {
     margin-bottom: 10px;
+}
+
+.card-img_max {
+    height: 500px;
+}
+
+.card-btn {
+    display: flex;
+}
+
+.card-btn a {
+    margin-right: 10px;
 }
